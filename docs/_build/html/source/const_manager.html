@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>circkit.const_manager &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>circkit.const_manager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/const_manager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-circkit.const_manager">
+<span id="circkit-const-manager"></span><h1>circkit.const_manager<a class="headerlink" href="#module-circkit.const_manager" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.const_manager.ArithmeticConstManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.const_manager.</span></span><span class="sig-name descname"><span class="pre">ArithmeticConstManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.ArithmeticConstManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ConstManager</span></code></p>
+<p>Generic manager for arithmetic constants.
+Should cover most cases, including SageMath’s Zmod, GF(p), GF(q)</p>
+<dl>
+<dt>For validation:</dt><dd><p>the input value should be of type int or .parent() should return the base_ring</p>
+</dd>
+<dt>For conversion:</dt><dd><p>int -&gt; const
+tries base_ring.fetch_int(int), otherwise base_ring(int)</p>
+<p>const -&gt; int
+tries base_ring.integer_representation(int), otherwise int(const)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.ArithmeticConstManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.ArithmeticConstManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.ArithmeticConstManager.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.ArithmeticConstManager.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a constant of unified type
+from value of possibly various types</p>
+<p>Default implementation: no checks, no conversion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.ArithmeticConstManager.output">
+<span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.ArithmeticConstManager.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a constant of unified type to simple representation (e.g. int or string?)
+AU: maybe have different output formats?</p>
+<p>Default implementation: no conversion</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.const_manager.BooleanConstManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.const_manager.</span></span><span class="sig-name descname"><span class="pre">BooleanConstManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.BooleanConstManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ConstManager</span></code></p>
+<p>Simple Boolean constant manager (0 or 1 only).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.BooleanConstManager.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.BooleanConstManager.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.BooleanConstManager.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.BooleanConstManager.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a constant of unified type
+from value of possibly various types</p>
+<p>Default implementation: no checks, no conversion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.const_manager.BooleanConstManager.output">
+<span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.const_manager.BooleanConstManager.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a constant of unified type to simple representation (e.g. int or string?)
+AU: maybe have different output formats?</p>
+<p>Default implementation: no conversion</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

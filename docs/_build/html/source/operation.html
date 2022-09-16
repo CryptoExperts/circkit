@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>circkit.operation &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>circkit.operation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/operation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-circkit.operation">
+<span id="circkit-operation"></span><h1>circkit.operation<a class="headerlink" href="#module-circkit.operation" title="Permalink to this heading">¶</a></h1>
+<p>Operations may include arbitrary parameters. It is important to distinguish
+<em>parameters</em> (arbitrary objects) from node’s <em>inputs</em> (other nodes in the
+same circuit).</p>
+<p>An <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> <em>(sub)class</em> describes an operation and all its parameters,
+including validation of parameters, number of node’s inputs and outputs.</p>
+<p>An <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> <em>instance</em> describes a concrete operation with all
+parameters set. It does not however define a node in a circuit or node’s
+inputs/outputs. One Operation instance can be used by multiple nodes.</p>
+<p>The node/operation creation API is a double-step call (similar to e.g.
+<a class="reference external" href="https://keras.io/api/layers/">Keras Layers API</a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">INPUT</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)()</span>
+<span class="n">xcube</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">,</span> <span class="n">Operation</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">Operation</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="n">x</span><span class="p">),</span> <span class="n">circuit</span><span class="o">.</span><span class="n">Node</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here, both lines follow this API, in which the first call creates an <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a>
+instance and the second call creates a <a class="reference internal" href="node.html#circkit.node.Node" title="circkit.node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">circkit.node.Node</span></code></a> instance.</p>
+<p>In the first line, we first create
+the <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.INPUT" title="circkit.circuit.Circuit.INPUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit.INPUT</span></code></a> <em>operation</em>, which has the input name “x” as the only parameter:
+<code class="docutils literal notranslate"><span class="pre">circuit.INPUT(&quot;x&quot;)</span></code>. Then, we call this operation without any incoming nodes
+to create a new node in the circuit, corresponding to the input “x”.</p>
+<p>In the second line, we first create the <cite>EXP</cite> operation with the parameter
+<cite>power = 3</cite>. We then call this operation with a node as an argument which
+defines the incoming node for exponentitation.</p>
+<p>The reason for the double-call is to separate clearly the two different
+notions - parameters and inputs, and to allow using the full python’s call
+syntax. For example, we could use keyword args such as <code class="docutils literal notranslate"><span class="pre">Circuit.EXP(power=3)</span></code>.
+This is particularly useful for complex operations to reduce the number of
+errors e.g. in parameter/input order.</p>
+<p>Defining operation example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>  <span class="c1"># subclass to include</span>
+                                           <span class="c1"># standard INPUT, GET, CONST</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">SUB</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">MIX</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">MultiVariadic</span><span class="p">):</span>
+            <span class="n">alpha</span> <span class="p">:</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+
+            <span class="k">def</span> <span class="nf">determine_n_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">incoming</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">a</span> <span class="o">-</span> <span class="n">t</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">¶</a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="circkit.operation.VARIABLE">
+<span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">VARIABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;VARIABLE&gt;</span></em><a class="headerlink" href="#circkit.operation.VARIABLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special <a class="reference internal" href="#circkit.operation.Operation.n_inputs" title="circkit.operation.Operation.n_inputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Operation.n_inputs</span></code></a> / <a class="reference internal" href="#circkit.operation.Operation.n_outputs" title="circkit.operation.Operation.n_outputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Operation.n_outputs</span></code></a> value -
+unspecified number of inputs/outputs (or determined dynamically).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="circkit.operation.UNIT">
+<span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">UNIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;UNIT&gt;</span></em><a class="headerlink" href="#circkit.operation.UNIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Special <a class="reference internal" href="#circkit.operation.Operation.n_outputs" title="circkit.operation.Operation.n_outputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Operation.n_outputs</span></code></a> value - non-iterable output.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.OperationMeta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">OperationMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.OperationMeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Metaclass for the <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> class.</p>
+<p>Manages definition of operations (classes)
+and creation of operation instances (e.g. preparing parameters,
+caching operatios).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.OperationMeta.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clsname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.OperationMeta.__new__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a new Operation class (in a circuit class).</p>
+<ol class="arabic simple">
+<li><p>Parse definitions of parameters from the annotations and
+assignments (defaults).</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">__slots__</span></code> to include new parameters.</p></li>
+<li><p>Collects parameters from superclasses. If such a parameter attribute
+is overriden by a non-parameter attribute, the parameter is excluded.
+This allows e.g. to remove superclass’ parameter by setting attribute
+<code class="docutils literal notranslate"><span class="pre">param</span> <span class="pre">=</span> <span class="pre">None</span></code>.</p></li>
+<li><p>Create dynamically new <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> class with given slots
+and parameters descriptions.</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.OperationMeta.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.OperationMeta.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a>.</p>
+<p>Currently, only implements caching of <code class="xref py py-class docutils literal notranslate"><span class="pre">Operation`s</span> <span class="pre">(if</span> <span class="pre">enabled),</span>
+<span class="pre">and</span> <span class="pre">passes</span> <span class="pre">all</span> <span class="pre">the</span> <span class="pre">parameters</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">constructor</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">:class:`Operation</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Describes a (parametrized) operation that can be used in a circuit.</p>
+<p>Parameters of an <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> instance are accessible directly as
+attributes.</p>
+<p>All supporting attributes are either prefixed with “_” or are UPPERCASE
+to avoid collisions with possible parameter names. Exceptions:
+<a class="reference internal" href="#circkit.operation.Operation.n_inputs" title="circkit.operation.Operation.n_inputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n_inputs</span></code></a> and <a class="reference internal" href="#circkit.operation.Operation.n_outputs" title="circkit.operation.Operation.n_outputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n_outputs</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Defining</span> <span class="pre">attributes</span> <span class="pre">(may/should</span> <span class="pre">be</span> <span class="pre">overwritten</span> <span class="pre">in</span> <span class="pre">subclasses)</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation.n_inputs">
+<span class="sig-name descname"><span class="pre">n_inputs</span></span><a class="headerlink" href="#circkit.operation.Operation.n_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of node inputs the operation requires.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation.n_outputs">
+<span class="sig-name descname"><span class="pre">n_outputs</span></span><a class="headerlink" href="#circkit.operation.Operation.n_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of node outputs the operation has (to be retrieved with the
+<a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.GET" title="circkit.circuit.Circuit.Operations.GET"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit.Operations.GET</span></code></a> operation).
+By default, is set to the special object <a class="reference internal" href="#circkit.operation.UNIT" title="circkit.operation.UNIT"><code class="xref py py-data docutils literal notranslate"><span class="pre">UNIT</span></code></a>, which
+means that the output is non iterable. Note that this is different from
+<code class="docutils literal notranslate"><span class="pre">n_outputs</span> <span class="pre">=</span> <span class="pre">1</span></code>, where the actual output has to be retrieved e.g. as
+<code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">node[0]</span></code> or <cite>out, = node</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = UNIT</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation.SYMMETRIC">
+<span class="sig-name descname"><span class="pre">SYMMETRIC</span></span><a class="headerlink" href="#circkit.operation.Operation.SYMMETRIC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the order of the input nodes does not matter. Used e.g.
+for caching nodes (<code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">+</span> <span class="pre">a</span></code> may return the cached node <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation.PRECOMPUTABLE">
+<span class="sig-name descname"><span class="pre">PRECOMPUTABLE</span></span><a class="headerlink" href="#circkit.operation.Operation.PRECOMPUTABLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the operation is precomputable (given the inputs and the parameters).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation.STR_LIMIT">
+<span class="sig-name descname"><span class="pre">STR_LIMIT</span></span><a class="headerlink" href="#circkit.operation.Operation.STR_LIMIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum length of the string describing parameters to keep (for
+<a class="reference internal" href="#circkit.operation.Operation.__str__" title="circkit.operation.Operation.__str__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__str__()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = 30</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">Functional</span> <span class="pre">attributes</span> <span class="pre">(should</span> <span class="pre">not</span> <span class="pre">be</span> <span class="pre">overriden</span> <span class="pre">manually)</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation._circuit">
+<span class="sig-name descname"><span class="pre">_circuit</span></span><a class="headerlink" href="#circkit.operation.Operation._circuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Circuit instance in which this <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> class/instance
+is defined/subclassed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="circuit.html#circkit.circuit.Circuit" title="circkit.circuit.Circuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation._circuit_class">
+<span class="sig-name descname"><span class="pre">_circuit_class</span></span><a class="headerlink" href="#circkit.operation.Operation._circuit_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Circuit class in which this <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> class/instance
+is defined/subclassed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="circuit.html#circkit.circuit.Circuit" title="circkit.circuit.Circuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.Operation._param_descriptions">
+<span class="sig-name descname"><span class="pre">_param_descriptions</span></span><a class="headerlink" href="#circkit.operation.Operation._param_descriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mapping from parameter names to <a class="reference internal" href="param.html#circkit.param.Param" title="circkit.param.Param"><code class="xref py py-class docutils literal notranslate"><span class="pre">Param</span></code></a> objects describing
+the parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>dict`[str, :class:</cite>.Param`]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> <em>instance</em> by specifying parameters (if any).</p>
+<p>Note that it is not linked to any <a class="reference internal" href="circuit.html#circkit.circuit.BaseCircuit.Node" title="circkit.circuit.BaseCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a> yet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">incoming</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new node using this operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.reapply">
+<span class="sig-name descname"><span class="pre">reapply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.reapply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new operation instance with same parameters (by name),
+but in the other circuit. &#64;name define name of the operation, by
+default it is the name of this operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__eq__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test equality of two operations.</p>
+<p>Two operations are equal if their names are equal and all parameters
+are equal.</p>
+<p>To check the class of the operation (e.g. INPUT, ADD, CONST, etc.)
+use:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isinstance(op,</span> <span class="pre">CircuitClass.ADD)</span></code> : checks circuit class;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isinstance(op,</span> <span class="pre">CircuitInstance.ADD)</span></code> : checks circuit instance too;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">op.is_ADD()</span></code> : ADD must be present in the circuit’s class;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">op._name</span> <span class="pre">==</span> <span class="pre">&quot;ADD&quot;</span></code> : by name, does not check circuit class/instance.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><em>Operation</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__hash__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.eval_with_node">
+<span class="sig-name descname"><span class="pre">eval_with_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.eval_with_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method should be overriden if the evaluation requires some
+information from the node. By default, it ignores the node and calls
+<a class="reference internal" href="#circkit.operation.Operation.eval" title="circkit.operation.Operation.eval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">eval()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.before_create_node">
+<span class="sig-name descname"><span class="pre">before_create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.before_create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validate node inputs before creating a new node with this operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.after_create_node">
+<span class="sig-name descname"><span class="pre">after_create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.after_create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check new node after creation (node uses this operation).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.on_new_circuit">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_new_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.on_new_circuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback on linking the operation class to a new circuit instance.</p>
+<p>E.g. can store common circuit-level data in the circuit instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.determine_n_outputs">
+<span class="sig-name descname"><span class="pre">determine_n_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.determine_n_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine number of outputs of a new node using this operation.</p>
+<p>By default, returns operation’s <a class="reference internal" href="#circkit.operation.Operation.n_outputs" title="circkit.operation.Operation.n_outputs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">n_outputs</span></code></a>.
+However, this method must be overriden for multi-operations.
+For example, the number of outputs may be set equal to the number
+of inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__reduce__">
+<span class="sig-name descname"><span class="pre">__reduce__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__reduce__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for pickle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.operation.Operation.__setstate__">
+<span class="sig-name descname"><span class="pre">__setstate__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.__setstate__" title="Permalink to this definition">¶</a></dt>
+<dd><p>To update class.__dict__ with dict/map</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.Binary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.Binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 2 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.MultiBinary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiBinary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.MultiBinary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 2 inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.MultiNullary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiNullary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.MultiNullary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with no inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.MultiTernary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiTernary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.MultiTernary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 3 inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.MultiUnary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiUnary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.MultiUnary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 1 input and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.MultiVariadic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiVariadic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.MultiVariadic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with variable number of inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.Nullary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Nullary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.Nullary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with no inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.Ternary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ternary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.Ternary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 3 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.Unary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Unary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.Unary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 1 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Operation.Variadic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variadic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Operation.Variadic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with variable number of inputs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Nullary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Nullary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Nullary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with no inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Unary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Unary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Unary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 1 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Binary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 2 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Ternary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Ternary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Ternary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 3 inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.Variadic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">Variadic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.Variadic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with variable number of inputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.MultiNullary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">MultiNullary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.MultiNullary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with no inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.MultiUnary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">MultiUnary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.MultiUnary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 1 input and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.MultiBinary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">MultiBinary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.MultiBinary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 2 inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.MultiTernary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">MultiTernary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.MultiTernary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with 3 inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.operation.MultiVariadic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">MultiVariadic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.operation.MultiVariadic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a></p>
+<p>Operation with variable number of inputs and (possibly) multiple number of outputs.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="circkit.operation.UnhashableOperationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.operation.</span></span><span class="sig-name descname"><span class="pre">UnhashableOperationError</span></span><a class="headerlink" href="#circkit.operation.UnhashableOperationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised when an <a class="reference internal" href="#circkit.operation.Operation" title="circkit.operation.Operation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operation</span></code></a> is being hashed but hashing
+is not defined (e.g. some parameters are unhashable objects).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.operation.UnhashableOperationError.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#circkit.operation.UnhashableOperationError.__weakref__" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

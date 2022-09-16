@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>circkit.transformers package &#8212; Circkit  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="circkit.bytecode package" href="circkit.bytecode.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="circkit.bytecode.html" title="circkit.bytecode package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Circkit  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="circkit.html" accesskey="U">circkit package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">circkit.transformers package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="circkit-transformers-package">
+<h1>circkit.transformers package<a class="headerlink" href="#circkit-transformers-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-circkit.transformers.core">
+<span id="circkit-transformers-core-module"></span><h2>circkit.transformers.core module<a class="headerlink" href="#module-circkit.transformers.core" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.transformers.core.</span></span><span class="sig-name descname"><span class="pre">Transformer</span></span><a class="headerlink" href="#circkit.transformers.core.Transformer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.START_FROM_VARS">
+<span class="sig-name descname"><span class="pre">START_FROM_VARS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#circkit.transformers.core.Transformer.START_FROM_VARS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.source_circuit">
+<span class="sig-name descname"><span class="pre">source_circuit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="circkit.html#circkit.circuit.Circuit" title="circkit.circuit.Circuit"><span class="pre">circkit.circuit.Circuit</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.Transformer.source_circuit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.current_node">
+<span class="sig-name descname"><span class="pre">current_node</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="circkit.html#circkit.node.Node" title="circkit.node.Node"><span class="pre">circkit.node.Node</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.Transformer.current_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.current_operation">
+<span class="sig-name descname"><span class="pre">current_operation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">circkit.operation.Operation</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.Transformer.current_operation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.before_transform">
+<span class="sig-name descname"><span class="pre">before_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.before_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.after_transform">
+<span class="sig-name descname"><span class="pre">after_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.after_transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.visit_all">
+<span class="sig-name descname"><span class="pre">visit_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.visit_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.before_visit">
+<span class="sig-name descname"><span class="pre">before_visit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.before_visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler before visiting node</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.after_visit">
+<span class="sig-name descname"><span class="pre">after_visit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.after_visit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler after visiting node</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.on_visit_error">
+<span class="sig-name descname"><span class="pre">on_visit_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.on_visit_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.visit">
+<span class="sig-name descname"><span class="pre">visit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.visit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.visit_generic">
+<span class="sig-name descname"><span class="pre">visit_generic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.visit_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.visit_GET">
+<span class="sig-name descname"><span class="pre">visit_GET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.visit_GET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.Transformer.make_output">
+<span class="sig-name descname"><span class="pre">make_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.Transformer.make_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.transformers.core.</span></span><span class="sig-name descname"><span class="pre">CircuitTransformer</span></span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.transformers.core.Transformer" title="circkit.transformers.core.Transformer"><code class="xref py py-class docutils literal notranslate"><span class="pre">circkit.transformers.core.Transformer</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.DEFAULT_CIRCUIT_CLASS">
+<span class="sig-name descname"><span class="pre">DEFAULT_CIRCUIT_CLASS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.DEFAULT_CIRCUIT_CLASS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.DEFAULT_BASE_RING">
+<span class="sig-name descname"><span class="pre">DEFAULT_BASE_RING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.DEFAULT_BASE_RING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.AUTO_OUTPUT">
+<span class="sig-name descname"><span class="pre">AUTO_OUTPUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.AUTO_OUTPUT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.NAME_SUFFIX">
+<span class="sig-name descname"><span class="pre">NAME_SUFFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.NAME_SUFFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.FORCE_MANY_TO_ONE">
+<span class="sig-name descname"><span class="pre">FORCE_MANY_TO_ONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.FORCE_MANY_TO_ONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.create_target_circuit">
+<span class="sig-name descname"><span class="pre">create_target_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">circuit_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_ring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.create_target_circuit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.base_ring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">base_ring</span></span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.base_ring" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circuit</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.transform" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.visit_generic">
+<span class="sig-name descname"><span class="pre">visit_generic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.visit_generic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.core.CircuitTransformer.make_output">
+<span class="sig-name descname"><span class="pre">make_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.core.CircuitTransformer.make_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default implementation: mark images of output notes as outputs in
+new circuit.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="circkit-transformers-derandomizer-module">
+<h2>circkit.transformers.derandomizer module<a class="headerlink" href="#circkit-transformers-derandomizer-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-circkit.transformers.isw">
+<span id="circkit-transformers-isw-module"></span><h2>circkit.transformers.isw module<a class="headerlink" href="#module-circkit.transformers.isw" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.transformers.isw.</span></span><span class="sig-name descname"><span class="pre">IswOnArithmetic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preshared_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_output_shares</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.transformers.core.CircuitTransformer" title="circkit.transformers.core.CircuitTransformer"><code class="xref py py-class docutils literal notranslate"><span class="pre">circkit.transformers.core.CircuitTransformer</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> (<em>int</em>) – </p></li>
+<li><p><strong>combine_output_shares</strong> (<em>bool</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.TARGET_CIRCUIT">
+<span class="sig-name descname"><span class="pre">TARGET_CIRCUIT</span></span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.TARGET_CIRCUIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="circkit.html#circkit.arithmetic.ArithmeticCircuit" title="circkit.arithmetic.ArithmeticCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">circkit.arithmetic.ArithmeticCircuit</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preshared_vars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_output_shares</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order</strong> (<em>int</em>) – ISW masking order</p></li>
+<li><p><strong>preshared_vars</strong> – None or an interated list of indice of
+inputing variables which is shared by the input</p></li>
+<li><p><strong>combine_output_shares</strong> (<em>bool</em>) – if True, then output shares with be
+combined before outputting it; otherwise all shares will
+be marked as outputs</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.n_shares">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n_shares</span></span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.n_shares" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.visit_VAR">
+<span class="sig-name descname"><span class="pre">visit_VAR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.visit_VAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.visit_ADD">
+<span class="sig-name descname"><span class="pre">visit_ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.visit_ADD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.visit_MUL">
+<span class="sig-name descname"><span class="pre">visit_MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.visit_MUL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.visit_CONST">
+<span class="sig-name descname"><span class="pre">visit_CONST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.visit_CONST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.transformers.isw.IswOnArithmetic.output">
+<span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.transformers.isw.IswOnArithmetic.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="circkit-transformers-optimizer-module">
+<h2>circkit.transformers.optimizer module<a class="headerlink" href="#circkit-transformers-optimizer-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="circkit-transformers-scheduler-module">
+<h2>circkit.transformers.scheduler module<a class="headerlink" href="#circkit-transformers-scheduler-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-circkit.transformers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-circkit.transformers" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">circkit.transformers package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-circkit.transformers.core">circkit.transformers.core module</a></li>
+<li><a class="reference internal" href="#circkit-transformers-derandomizer-module">circkit.transformers.derandomizer module</a></li>
+<li><a class="reference internal" href="#module-circkit.transformers.isw">circkit.transformers.isw module</a></li>
+<li><a class="reference internal" href="#circkit-transformers-optimizer-module">circkit.transformers.optimizer module</a></li>
+<li><a class="reference internal" href="#circkit-transformers-scheduler-module">circkit.transformers.scheduler module</a></li>
+<li><a class="reference internal" href="#module-circkit.transformers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="circkit.bytecode.html"
+                        title="previous chapter">circkit.bytecode package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/source/circkit.transformers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="circkit.bytecode.html" title="circkit.bytecode package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Circkit  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="circkit.html" >circkit package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">circkit.transformers package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, CryptoExperts.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
+    </div>
+  </body>
+</html>

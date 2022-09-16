@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to define a new circuit type &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">More docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/operation.html">circkit.operation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/param.html">circkit.param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/circuit.html">circkit.circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/node.html">circkit.node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/const_manager.html">circkit.const_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/arithmetic.html">circkit.arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/bitwise.html">circkit.bitwise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/transformers.html">circkit.transformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/location.html">circkit.location</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to define a new circuit type</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tuto-p2_new-circuit-type.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-define-a-new-circuit-type">
+<h1>How to define a new circuit type<a class="headerlink" href="#how-to-define-a-new-circuit-type" title="Permalink to this heading">¶</a></h1>
+<p>In this tutorial, we show you how to define a new circuit type,
+i.e. define operations of your preference in a circuit, based on the
+<code class="docutils literal notranslate"><span class="pre">circkit</span></code> framework. In particular, we provide the guidance on:</p>
+<ol class="arabic simple">
+<li><p><a class="reference external" href="#defining-a-new-circuit-type">Defining a new circuit type</a></p></li>
+<li><p><a class="reference external" href="#syntactic-sugar">Syntactic sugar</a></p></li>
+<li><p><a class="reference external" href="#some-examples">Some examples</a></p></li>
+</ol>
+<p>Note that this tutorial shows you how to define a new circuit type. In
+practice it is better to use the built-in <code class="docutils literal notranslate"><span class="pre">ArithmeticCircuit</span></code> or
+<code class="docutils literal notranslate"><span class="pre">OptArithmeticCircuit</span></code> as in the tutorial of building an arithmetic
+circuit. If necessary, you could inherit those circuits and then define
+your own operations.</p>
+<section id="defining-a-new-circuit-type">
+<h2>1. Defining a new circuit type<a class="headerlink" href="#defining-a-new-circuit-type" title="Permalink to this heading">¶</a></h2>
+<section id="defining-syntax">
+<h3>Defining syntax<a class="headerlink" href="#defining-syntax" title="Permalink to this heading">¶</a></h3>
+<p>To define a new circuit type, we follow the steps:</p>
+<ol class="arabic simple">
+<li><p>Inherit the <code class="docutils literal notranslate"><span class="pre">Circuit</span></code> class</p></li>
+<li><p>Inherit the <code class="docutils literal notranslate"><span class="pre">Circuit.Operations</span></code> class inside the new circuit type</p></li>
+<li><p>Define the operations of the new circuit type as classes nested
+inside the <code class="docutils literal notranslate"><span class="pre">Operations</span></code> class. Depending on the numbers of input
+nodes and output nodes, each operation should inherit one of the
+following types of <code class="docutils literal notranslate"><span class="pre">Operation</span></code>:</p></li>
+</ol>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.Unary</span></code></p></td>
+<td><p>Operation with 1 input node</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.Binary</span></code></p></td>
+<td><p>Operation with 2 input nodes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.Ternary</span></code></p></td>
+<td><p>Operation with 3 input nodes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.Variadic</span></code></p></td>
+<td><p>Operation with variable number of
+input nodes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.MultiNullary</span></code></p></td>
+<td><p>Operation with no inputs and
+variable number of output nodes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.MultiUnary</span></code></p></td>
+<td><p>Operation with 1 input and
+variable number of output nodes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.MultiBinary</span></code></p></td>
+<td><p>Operation with 2 inputs and
+variable number of output nodes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.MultiTernary</span></code></p></td>
+<td><p>Operation with 3 inputs and
+variable number of output nodes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Operation.MultiVariadic</span></code></p></td>
+<td><p>Operation with variable number of
+input nodes and variable number
+of output nodes</p></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s define addition operation as an example:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Operation</span>
+
+<span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Now, we can construct a circuit with the addition defined above. Recall
+that we still can use the following useful functions (as shown in the
+tutorial of building an arithmetic circuit) to build a circuit:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">add_input(name)</span></code>: add an input node</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_inputs(n,</span> <span class="pre">format)</span></code>: add <code class="docutils literal notranslate"><span class="pre">n</span></code> input nodes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_output(node)</span></code>: mark <code class="docutils literal notranslate"><span class="pre">node</span></code> as an output node</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">add_output(nodelist)</span></code>: mark <code class="docutils literal notranslate"><span class="pre">nodelist</span></code> as a list of output nodes</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">digraph().view()</span></code>: draw and view the graph of the circuit</p></li>
+</ul>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;A test circuit&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">ADD</span><span class="p">()(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="c1"># circuit.digraph().view()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s input nodes:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">inputs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output nodes:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">outputs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s input nodes:</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">NewCircuitType</span><span class="p">:</span><span class="n">INPUT</span><span class="p">[</span><span class="n">name</span><span class="o">=</span><span class="n">x</span><span class="p">]</span><span class="c1">#0 ()&gt;, &lt;NewCircuitType:INPUT[name=y]#1 ()&gt;]</span>
+<span class="n">Circuit</span><span class="s1">&#39;s output nodes:</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">NewCircuitType</span><span class="p">:</span><span class="n">ADD</span><span class="c1">#2 (0,1)&gt;]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="defining-evaluation">
+<h2>Defining evaluation<a class="headerlink" href="#defining-evaluation" title="Permalink to this heading">¶</a></h2>
+<p>So far, the circuit is just about the syntax since we define the
+computational graph but no computational rules. This is fine, since
+typical applications are not all about computing the circuit. However,
+evaluating the circuit can be useful for testing purposes. To achieve
+this, we simply need to define the evaluation function for our
+operation.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Operation</span>
+
+<span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Now we can evaluate the circuit.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;A test circuit&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">ADD</span><span class="p">()(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s output:</span>
+<span class="p">[</span><span class="mi">30</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="defining-operations-with-parameters">
+<h3>Defining operations with parameters<a class="headerlink" href="#defining-operations-with-parameters" title="Permalink to this heading">¶</a></h3>
+<p>Defining an operation parameter is done through annotations, with
+possible assignment to mark a default value. It is then stored as an
+attribute of the operation instance, accessible e.g. for evaluation.
+Let’s define <code class="docutils literal notranslate"><span class="pre">EXP</span></code> operation with the <code class="docutils literal notranslate"><span class="pre">power</span></code> parameter as an
+example.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit</span> <span class="kn">import</span> <span class="n">Circuit</span><span class="p">,</span> <span class="n">Operation</span><span class="p">,</span> <span class="n">Param</span>
+
+<span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">EXP</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Unary</span><span class="p">):</span>
+            <span class="n">power</span> <span class="p">:</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">power</span>
+</pre></div>
+</div>
+<p>In the example above, <code class="docutils literal notranslate"><span class="pre">power</span></code> takes 2 as the default value. Let’s
+build a circuit to test it:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test circuit&quot;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">xsquare</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">xcube</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">([</span><span class="n">xsquare</span><span class="p">,</span> <span class="n">xcube</span><span class="p">])</span>
+
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">evaluate</span><span class="p">([</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s output:</span>
+<span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">125</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Here, we used <a class="reference external" href="source/param.rst#circkit.param.IntParam">Param.Int</a> to
+constraint the parameter type and value. The following table contains
+the parameter constraints supported by <code class="docutils literal notranslate"><span class="pre">circkit</span></code>:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Usage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Param.Const</span></code></p></td>
+<td><p>constants</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Param.Int</span></code></p></td>
+<td><p>integers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Param.Bool</span></code></p></td>
+<td><p>booleans</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Param.Str</span></code></p></td>
+<td><p>strings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Param.Tuple</span></code></p></td>
+<td><p>tuples</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Param.InputName</span></code></p></td>
+<td><p>name of an input, can be string or integer</p></td>
+</tr>
+</tbody>
+</table>
+<p>If we provide an incompatible value, it will cause an error. For
+example:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xquartic</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="s2">&quot;four&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---------------------------------------------------------------------------</span>
+
+<span class="ne">ValueError</span>                                <span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">7</span><span class="o">-</span><span class="mf">72e779</span><span class="n">c46385</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">----&gt;</span> <span class="mi">1</span> <span class="n">xquartic</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="s2">&quot;four&quot;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+
+
+<span class="o">~/</span><span class="n">Work</span><span class="o">/</span><span class="n">wbc</span><span class="o">/</span><span class="n">circkit</span><span class="o">/.</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.9</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">circkit</span><span class="o">/</span><span class="n">operation</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">kvalues</span><span class="p">)</span>
+    <span class="mi">158</span>         <span class="c1"># create the Operation instance anyway</span>
+    <span class="mi">159</span>         <span class="c1"># (not avoiding it to unify parsing of parameters)</span>
+<span class="o">--&gt;</span> <span class="mi">160</span>         <span class="n">op_new</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">kvalues</span><span class="p">)</span>
+    <span class="mi">161</span>         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_circuit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_circuit</span><span class="o">.</span><span class="n">CACHE_OPERATIONS</span><span class="p">:</span>
+    <span class="mi">162</span>             <span class="c1"># if a similar operation is in cache,</span>
+
+
+<span class="o">~/</span><span class="n">Work</span><span class="o">/</span><span class="n">wbc</span><span class="o">/</span><span class="n">circkit</span><span class="o">/.</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.9</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">circkit</span><span class="o">/</span><span class="n">operation</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">kvalues</span><span class="p">)</span>
+    <span class="mi">276</span>             <span class="c1"># - param checks only single value, is independent</span>
+    <span class="mi">277</span>             <span class="c1"># - to check groups, add methods to the op class</span>
+<span class="o">--&gt;</span> <span class="mi">278</span>             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">kvalues</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
+    <span class="mi">279</span>
+    <span class="mi">280</span>     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">incoming</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+
+<span class="o">~/</span><span class="n">Work</span><span class="o">/</span><span class="n">wbc</span><span class="o">/</span><span class="n">circkit</span><span class="o">/.</span><span class="n">venv</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.9</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">circkit</span><span class="o">/</span><span class="n">param</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+     <span class="mi">58</span>
+     <span class="mi">59</span>     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="o">---&gt;</span> <span class="mi">60</span>         <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+     <span class="mi">61</span>         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span> <span class="o">&gt;</span> <span class="n">value</span><span class="p">:</span>
+     <span class="mi">62</span>             <span class="k">raise</span> <span class="n">Param</span><span class="o">.</span><span class="n">InvalidValue</span><span class="p">(</span>
+
+
+<span class="ne">ValueError</span><span class="p">:</span> <span class="n">invalid</span> <span class="n">literal</span> <span class="k">for</span> <span class="nb">int</span><span class="p">()</span> <span class="k">with</span> <span class="n">base</span> <span class="mi">10</span><span class="p">:</span> <span class="s1">&#39;four&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="syntactic-sugar">
+<h2>2. Syntactic sugar<a class="headerlink" href="#syntactic-sugar" title="Permalink to this heading">¶</a></h2>
+<p>It is a bit clumsy to write <code class="docutils literal notranslate"><span class="pre">ADD</span></code>, <code class="docutils literal notranslate"><span class="pre">EXP</span></code> when building circuits,
+when these are basic arithmetic operations. We can define syntax sugar
+naturally by subclassing the
+<a class="reference external" href="source/node.rst#circkit.node.Node">Node</a> class.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">EXP</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Unary</span><span class="p">):</span>
+            <span class="n">power</span> <span class="p">:</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">min_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">power</span>
+
+    <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">ADD</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__pow__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">EXP</span><span class="p">(</span><span class="n">power</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Life gets much easier now:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">5</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s output:</span>
+<span class="p">[</span><span class="mi">100121</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="some-examples">
+<h2>3. Some examples<a class="headerlink" href="#some-examples" title="Permalink to this heading">¶</a></h2>
+<p>In this section, we demonstrate examples of defining circuit types with
+some interesting operations (rather than basic addition, substraction,
+multiplication, …). This aims to show that we can define a new circuit
+type with <em>our own operations</em>.</p>
+<section id="example-1">
+<h3>Example 1<a class="headerlink" href="#example-1" title="Permalink to this heading">¶</a></h3>
+<p>We define a new circuit type with 2 operations:</p>
+<ul class="simple">
+<li><p>MADD: given a list <span class="math notranslate nohighlight">\((x_1, x_2, \ldots, x_n)\)</span>, it returns the
+sum <span class="math notranslate nohighlight">\(x_1 + x_2 + \ldots + x_n\)</span></p></li>
+<li><p>MMUL: given a list <span class="math notranslate nohighlight">\((x_1, x_2, \ldots, x_n)\)</span>, it returns the
+product <span class="math notranslate nohighlight">\(x_1 \times x_2 \times \ldots \times x_n\)</span></p></li>
+</ul>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a new circuit type</span>
+<span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">MADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Variadic</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">operands</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">operands</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">MMUL</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Variadic</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">operands</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">operands</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">*=</span> <span class="n">x</span>
+                <span class="k">return</span> <span class="n">r</span>
+
+<span class="c1"># Create a new circuit instance</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test circuit&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_inputs</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;x</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">MADD</span><span class="p">()(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">MMUL</span><span class="p">()(</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the circuit</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s output:</span>
+<span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2">
+<h3>Example 2<a class="headerlink" href="#example-2" title="Permalink to this heading">¶</a></h3>
+<p>We define a new circuit type with 2 operations:</p>
+<ul class="simple">
+<li><p>MADDC: given a constant <span class="math notranslate nohighlight">\(c\)</span> and a list
+<span class="math notranslate nohighlight">\((x_1, x_2, \ldots, x_n)\)</span>, it returns a list
+<span class="math notranslate nohighlight">\((c+x_1, c+x_2, \ldots, c+x_n)\)</span></p></li>
+<li><p>MMULC: given a constant <span class="math notranslate nohighlight">\(c\)</span> and a list
+<span class="math notranslate nohighlight">\((x_1, x_2, \ldots, x_n)\)</span>, it returns a list
+<span class="math notranslate nohighlight">\((cx_1, cx_2, \ldots, cx_n)\)</span></p></li>
+</ul>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a new circuit type</span>
+<span class="k">class</span> <span class="nc">NewCircuitType</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">MADDC</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Variadic</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="n">operands</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">operands</span><span class="p">]</span>
+
+        <span class="k">class</span> <span class="nc">MMULC</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Variadic</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="n">operands</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">c</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">operands</span><span class="p">]</span>
+
+<span class="c1"># Create a new circuit instance</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">NewCircuitType</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test circuit&quot;</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">add_inputs</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;x</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">MADDC</span><span class="p">()(</span><span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">MMULC</span><span class="p">()(</span><span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+<span class="c1"># Evaluate the circuit</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit&#39;s output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Circuit</span><span class="s1">&#39;s output:</span>
+<span class="p">[[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]]</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

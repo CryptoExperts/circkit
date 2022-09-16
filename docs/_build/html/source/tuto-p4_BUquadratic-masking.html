@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minimalist quadratic masking transformer &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Speck Cipher" href="tuto-p4_speck.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Minimalist quadratic masking transformer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#define-the-transformer">Define the transformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-on-a-boolean-circuit">Test on a boolean circuit</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Minimalist quadratic masking transformer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/tuto-p4_BUquadratic-masking.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="minimalist-quadratic-masking-transformer">
+<h1>Minimalist quadratic masking transformer<a class="headerlink" href="#minimalist-quadratic-masking-transformer" title="Permalink to this heading">¶</a></h1>
+<p>This is an example for the transformer of minimalist quadratic masking
+scheme which was proposed in
+<a class="reference external" href="https://eprint.iacr.org/2018/049.pdf">BU18</a></p>
+<section id="define-the-transformer">
+<h2>Define the transformer<a class="headerlink" href="#define-the-transformer" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.transformers.core</span> <span class="kn">import</span> <span class="n">CircuitTransformer</span>
+<span class="kn">from</span> <span class="nn">circkit.boolean</span> <span class="kn">import</span> <span class="n">BooleanCircuit</span>
+<span class="kn">from</span> <span class="nn">circkit.array</span> <span class="kn">import</span> <span class="n">Array</span>
+
+<span class="k">class</span> <span class="nc">BUQuadraticMasking</span><span class="p">(</span><span class="n">CircuitTransformer</span><span class="p">):</span>
+    <span class="c1"># circuit type of the target circuit</span>
+    <span class="n">TARGET_CIRCUIT</span> <span class="o">=</span> <span class="n">BooleanCircuit</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+<span class="sd">        :order: ISW masking order</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># fixed number of shares</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shares</span><span class="p">,</span> <span class="n">randshares</span><span class="p">):</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">shares</span>
+        <span class="n">ra</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">rc</span> <span class="o">=</span> <span class="n">randshares</span>
+
+        <span class="n">ma</span> <span class="o">=</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="n">mb</span> <span class="o">=</span> <span class="n">rb</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">rc</span><span class="p">)</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">ma</span> <span class="o">+</span> <span class="n">mb</span> <span class="o">+</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rc</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">rb</span> <span class="o">+</span> <span class="n">rc</span><span class="p">)</span> <span class="o">+</span> <span class="n">rc</span>
+
+        <span class="n">a1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">ra</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">rb</span>
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">rc</span>
+        <span class="n">new_shares</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">c1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">new_shares</span>
+
+    <span class="k">def</span> <span class="nf">visit_INPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_share</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">new_name</span><span class="p">)</span>
+            <span class="n">shares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="n">shares</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">shares</span>
+
+    <span class="k">def</span> <span class="nf">visit_XOR</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">shares_1</span><span class="p">,</span> <span class="n">shares_2</span><span class="p">):</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">randshares_1</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">ra</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">rc</span><span class="p">])</span>
+
+        <span class="n">rd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">randshares_2</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">rd</span><span class="p">,</span> <span class="n">re</span><span class="p">,</span> <span class="n">rf</span><span class="p">])</span>
+
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">shares_1</span><span class="p">,</span> <span class="n">randshares_1</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">shares_2</span><span class="p">,</span> <span class="n">randshares_2</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">d</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">b</span> <span class="o">+</span> <span class="n">e</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">f</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">e</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">d</span>
+
+        <span class="k">return</span> <span class="n">Array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">visit_AND</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">shares_1</span><span class="p">,</span> <span class="n">shares_2</span><span class="p">):</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">randshares_1</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">ra</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">rc</span><span class="p">])</span>
+
+        <span class="n">rd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">randshares_2</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">rd</span><span class="p">,</span> <span class="n">re</span><span class="p">,</span> <span class="n">rf</span><span class="p">])</span>
+
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">shares_1</span><span class="p">,</span> <span class="n">randshares_1</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">refresh</span><span class="p">(</span><span class="n">shares_2</span><span class="p">,</span> <span class="n">randshares_2</span><span class="p">)</span>
+
+        <span class="n">ma</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="n">f</span> <span class="o">+</span> <span class="n">rc</span> <span class="o">*</span> <span class="n">e</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">e</span> <span class="o">+</span> <span class="n">rf</span> <span class="o">*</span> <span class="n">b</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">e</span> <span class="o">+</span> <span class="n">rf</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="n">d</span> <span class="o">+</span> <span class="n">rc</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">ma</span> <span class="o">+</span> <span class="n">d</span><span class="o">*</span><span class="n">md</span> <span class="o">+</span> <span class="n">rc</span><span class="o">*</span><span class="n">rf</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="n">f</span>
+
+        <span class="k">return</span> <span class="n">Array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">visit_CONST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+        <span class="n">rb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">add_const</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">rx</span> <span class="o">=</span> <span class="n">ra</span><span class="o">*</span><span class="n">rb</span> <span class="o">+</span> <span class="n">x</span>
+
+        <span class="n">shares</span> <span class="o">=</span> <span class="n">Array</span><span class="p">([</span><span class="n">ra</span><span class="p">,</span> <span class="n">rb</span><span class="p">,</span> <span class="n">rx</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">shares</span>
+</pre></div>
+</div>
+</section>
+<section id="test-on-a-boolean-circuit">
+<h2>Test on a boolean circuit<a class="headerlink" href="#test-on-a-boolean-circuit" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.boolean</span> <span class="kn">import</span> <span class="n">BooleanCircuit</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">BooleanCircuit</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="c1"># ISW transformer</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">BUQuadraticMasking</span><span class="p">()</span>
+<span class="n">newC</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+
+<span class="c1"># see the graph and verify the ISW circuit</span>
+<span class="c1"># iswC.digraph().view()</span>
+
+<span class="c1"># # Evaluate on original circuit</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original circuit output: </span><span class="si">{</span><span class="n">out</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Evaluate on BU quadratic masking circuit</span>
+<span class="c1"># 1 = 1 * 0 + 1 and 0 = 1 * 1 + 1</span>
+<span class="n">inp_shares</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">n_tests</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_tests</span><span class="p">):</span>
+    <span class="n">out_shares</span> <span class="o">=</span> <span class="n">newC</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp_shares</span><span class="p">)</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">out_shares</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span> <span class="o">+</span> <span class="n">c</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output shares: </span><span class="si">{</span><span class="n">out_shares</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">ret</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Original circuit output: [1]
+Output shares: [0, 0, 1] --&gt; 1
+Output shares: [1, 1, 0] --&gt; 1
+Output shares: [1, 0, 1] --&gt; 1
+Output shares: [1, 1, 0] --&gt; 1
+Output shares: [0, 1, 1] --&gt; 1
+Output shares: [0, 0, 1] --&gt; 1
+Output shares: [1, 0, 1] --&gt; 1
+Output shares: [1, 1, 0] --&gt; 1
+Output shares: [0, 0, 1] --&gt; 1
+Output shares: [0, 0, 1] --&gt; 1
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tuto-p4_speck.html" class="btn btn-neutral float-left" title="Speck Cipher" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

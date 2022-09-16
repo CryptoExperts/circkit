@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to build a bitwise circuit &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to build a boolean circuit" href="tuto-p1_boolean-circuit.html" />
+    <link rel="prev" title="How to build an arithmetic circuit" href="tuto-p1_builtin-circuit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to build a bitwise circuit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to build a bitwise circuit</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/tuto-p1_bitwise-circuit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-build-a-bitwise-circuit">
+<h1>How to build a bitwise circuit<a class="headerlink" href="#how-to-build-a-bitwise-circuit" title="Permalink to this heading">¶</a></h1>
+<p>Bitwise is another built-in circuit type in the <code class="docutils literal notranslate"><span class="pre">circkit</span></code> framework.
+We can follow the same steps as when we build an arithmetic circuit to
+build a bitwise one.</p>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this heading">¶</a></h2>
+<p>A bitwise circuit supports the following operations:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Notation</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AND</p></td>
+<td><p><span class="math notranslate nohighlight">\(\&amp;\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>OR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\|\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>XOR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\wedge\)</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>NOT</p></td>
+<td><p><span class="math notranslate nohighlight">\(\sim\)</span></p></td>
+<td><p>unary operation</p></td>
+</tr>
+<tr class="row-even"><td><p>SHL</p></td>
+<td><p><span class="math notranslate nohighlight">\(\ll\)</span></p></td>
+<td><p>shift left (constant postions)</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHR</p></td>
+<td><p><span class="math notranslate nohighlight">\(\gg\)</span></p></td>
+<td><p>shift right (constant postions)</p></td>
+</tr>
+<tr class="row-even"><td><p>ROL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">node.rol(n)</span></code></p></td>
+<td><p>circular shift left (constant postions)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ROR</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">node.ror(n)</span></code></p></td>
+<td><p>circular shift right (constant postions)</p></td>
+</tr>
+<tr class="row-even"><td><p>ADD</p></td>
+<td><p><span class="math notranslate nohighlight">\(+\)</span></p></td>
+<td><p>addition</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUB</p></td>
+<td><p><span class="math notranslate nohighlight">\(-\)</span></p></td>
+<td><p>subtraction</p></td>
+</tr>
+<tr class="row-even"><td><p>MUL</p></td>
+<td><p><span class="math notranslate nohighlight">\(*\)</span></p></td>
+<td><p>multiplication</p></td>
+</tr>
+<tr class="row-odd"><td><p>DIV</p></td>
+<td><p><span class="math notranslate nohighlight">\(/\)</span></p></td>
+<td><p>division</p></td>
+</tr>
+<tr class="row-even"><td><p>MOD</p></td>
+<td><p><span class="math notranslate nohighlight">\(\%\)</span></p></td>
+<td><p>modulo</p></td>
+</tr>
+<tr class="row-odd"><td><p>NEG</p></td>
+<td><p><span class="math notranslate nohighlight">\(-\)</span></p></td>
+<td><p>negation, unary operation</p></td>
+</tr>
+<tr class="row-even"><td><p>LUT</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">node.lookup_in(-)</span></code></p></td>
+<td><p>lookup table, value of node is index</p></td>
+</tr>
+<tr class="row-odd"><td><p>RND</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">C.RND()()</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\(\text{C}\)</span> is the circuit</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h2>
+<p>To build a bitwise circuit, we have to specify <span class="math notranslate nohighlight">\(\text{word_size}\)</span>
+which is the bit size of a word (value of a node). We denote
+<span class="math notranslate nohighlight">\(\text{mask} = 2^\text{word_size} - 1\)</span>. Every word in the circuit
+is automatically ensured not to exceed <span class="math notranslate nohighlight">\(\text{word_size}\)</span> bits by
+AND-ing with the mask. Below is a simple example.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.bitwise</span> <span class="kn">import</span> <span class="n">BitwiseCircuit</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">BitwiseCircuit</span><span class="p">(</span><span class="n">word_size</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span> <span class="o">*</span> <span class="mi">5</span>
+<span class="n">x4</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">x5</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+<span class="n">x6</span> <span class="o">=</span> <span class="n">x1</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span>
+<span class="n">x7</span> <span class="o">=</span> <span class="n">x2</span><span class="o">.</span><span class="n">rol</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">x8</span> <span class="o">=</span> <span class="n">x3</span><span class="o">.</span><span class="n">ror</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">x9</span> <span class="o">=</span> <span class="o">~</span><span class="n">x4</span>
+
+<span class="n">x10</span> <span class="o">=</span> <span class="n">x5</span> <span class="o">^</span> <span class="n">x6</span>
+<span class="n">x11</span> <span class="o">=</span> <span class="n">x7</span> <span class="o">|</span> <span class="n">x8</span>
+<span class="n">x12</span> <span class="o">=</span> <span class="n">x9</span> <span class="o">&amp;</span> <span class="n">x10</span>
+<span class="n">x13</span> <span class="o">=</span> <span class="o">-</span><span class="n">x11</span>
+
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">x12</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">x13</span><span class="p">)</span>
+
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Circuit output:
+[48, 93]
+</pre></div>
+</div>
+<p>In the advanced examples of this documentation, we build the Simon
+cipher and Speck cipher based on bitwise circuits to demonstrate the
+usefulness of this circuit type in applications</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.bitwise</span> <span class="kn">import</span> <span class="n">BitwiseCircuit</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">BitwiseCircuit</span><span class="p">(</span><span class="n">word_size</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">257</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">x2</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="mi">3</span>
+
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">])</span>
+
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Circuit output:
+[2, 2, 0]
+</pre></div>
+</div>
+<p>In the above example, <span class="math notranslate nohighlight">\(257\)</span> is represented by <span class="math notranslate nohighlight">\(1\)</span> in a 8-bit
+word, thus <span class="math notranslate nohighlight">\(x_0 = x_1\)</span>. The division only takes the round number,
+thus <span class="math notranslate nohighlight">\(x_2 = 1/3 = 0\)</span>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tuto-p1_builtin-circuit.html" class="btn btn-neutral float-left" title="How to build an arithmetic circuit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tuto-p1_boolean-circuit.html" class="btn btn-neutral float-right" title="How to build a boolean circuit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

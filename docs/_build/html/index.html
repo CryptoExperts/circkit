@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>circkit &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to build an arithmetic circuit" href="source/tuto-p1_builtin-circuit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>circkit</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="circkit">
+<h1>circkit<a class="headerlink" href="#circkit" title="Permalink to this heading">¶</a></h1>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> is a small framework for defining, constructing and manipulating
+computational circuits. It aims to be very generic. <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> supports both
+low-level circuits such as bit-based operations, word-based operations,
+arithmetic circuits over a ring and high-level circuits made up by gates (nodes)
+which are customized non-primitive functions.</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> provides 3 types of built-in circuits, including arithmetic circuit,
+boolean circuit and bitwise circuit. Additionally, it provides ISW transformer which
+is able to transform a boolean circuit into a new boolean circuit whose nodes are the shares
+as in the ISW scheme.</p>
+<p>Specially, <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> allows users to define new circuit types
+in which nodes can be their customized operations or functions. It also allows to define
+a new transformer which provides the convenience of transforming a source circuit
+to a target circuit. See the tutorials for more details.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<p>For arithmetic circuits working on finite fields, it needs to install Sagemath.
+For circuits working on decimal numbers, integers, boolean and bitwise, it is not
+necessary to install Sagemath.</p>
+<section id="circuits-with-sagemath">
+<h3>Circuits with Sagemath<a class="headerlink" href="#circuits-with-sagemath" title="Permalink to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Install <a class="reference external" href="https://www.sagemath.org">Sagemath</a>.</p></li>
+<li><p>Install <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> in Sagemath:</p></li>
+</ol>
+<ul class="simple">
+<li><p>via <cite>PyPI</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sage -pip install circkit
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>or via <cite>setup.py</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sage -pip install .
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Run your script with Sagemath:</p></li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sage -python script.py
+</pre></div>
+</div>
+<p>Or you can open a notebook with Sagemath and build your circuit with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> framework:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sage -n
+</pre></div>
+</div>
+</section>
+<section id="circuits-without-sagemath">
+<h3>Circuits without Sagemath<a class="headerlink" href="#circuits-without-sagemath" title="Permalink to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Install <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code>:</p></li>
+</ol>
+<ul class="simple">
+<li><p>via <cite>PyPI</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip3 install circkit
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>or via <cite>setup.py</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip3 install .
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Run your python script, for example:</p></li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python3 script.py
+</pre></div>
+</div>
+</section>
+<section id="using-virtual-environment">
+<h3>Using virtual environment<a class="headerlink" href="#using-virtual-environment" title="Permalink to this heading">¶</a></h3>
+<p>We can use a virtual enviroment to run <em>both circuits with and without Sagemath</em>.</p>
+<ol class="arabic simple">
+<li><p>Create a virtual environment of Sagemath:</p></li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sage -python -m venv --system-site-packages .venv
+</pre></div>
+</div>
+<p>Then, go to the virtual enviroment:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>source .venv/bin/activate
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Install <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> in the virtual environment.</p></li>
+</ol>
+<ul class="simple">
+<li><p>via <cite>PyPI</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install circkit
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>or via <cite>setup.py</cite>:</p></li>
+</ul>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install .
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Run your script on the virtual enviroment, for example:</p></li>
+</ol>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>python script.py
+</pre></div>
+</div>
+<p>Or you can open a python notebook in this virtual enviroment and build your circuit.</p>
+</section>
+</section>
+<section id="quick-example">
+<h2>Quick example<a class="headerlink" href="#quick-example" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.arithmetic</span> <span class="kn">import</span> <span class="n">ArithmeticCircuit</span>
+
+<span class="c1"># Step 1: Initialize a new arithmetic circuit</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ArithmeticCircuit</span><span class="p">()</span>
+
+<span class="c1"># Step 2: Define the input nodes</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Perform the computation</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="mi">3</span>
+
+<span class="c1"># Step 4: Define the output nodes</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="c1"># To see the graph of the circuit</span>
+<span class="n">C</span><span class="o">.</span><span class="n">digraph</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+
+<span class="c1"># Step 5: Evaluate the circuit</span>
+<span class="c1"># For example, a = 7, b = 9</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Circuit output:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x = </span><span class="si">{</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y = </span><span class="si">{</span><span class="n">out</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Circuit output:
+x = 21
+y = 11
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/quick-example-circuit.png"><img alt="_images/quick-example-circuit.png" class="align-center" src="_images/quick-example-circuit.png" style="width: 500px;" /></a>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Verify</span>
+<span class="n">a</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="mi">5</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Verification:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;x = </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y = </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Verification:
+x = 21
+y = 11
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+</div>
+</section>
+<section id="framework-vs-dsl">
+<h2>Framework vs DSL<a class="headerlink" href="#framework-vs-dsl" title="Permalink to this heading">¶</a></h2>
+<p>There exist already several <em>domain specific languages</em> (DSL) for cryptographic primitives.
+We decided to develop a python framework instead of a DSL to exploit the full power of a
+mature programming language to create abstractions for designing and working with circuits.
+Furthermore, the ability to overload arithmetic operations makes the framework as expressive as a DSL could be.</p>
+</section>
+<section id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this heading">¶</a></h2>
+<p>Viet Sang Nguyen, Matthieu Rivain, Aleksei Udovenko and Junwei Wang.</p>
+<p>Copyright 2022, CryptoExperts.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> is available under the <a class="reference external" href="https://opensource.org/licenses/MIT">MIT license</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="source/tuto-p1_builtin-circuit.html" class="btn btn-neutral float-right" title="How to build an arithmetic circuit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+circkit package
+=================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   circkit.bytecode
+   circkit.transformers
+
+Submodules
+----------
+
+circkit.arithmetic module
+---------------------------
+
+.. automodule:: circkit.arithmetic
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.array module
+----------------------
+
+.. automodule:: circkit.array
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.circuit module
+------------------------
+
+.. automodule:: circkit.circuit
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.const\_manager module
+-------------------------------
+
+.. automodule:: circkit.const_manager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.logger module
+-----------------------
+
+.. automodule:: circkit.logger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.node module
+---------------------
+
+.. automodule:: circkit.node
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.operations module
+---------------------------
+
+.. automodule:: circkit.operations
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.utils module
+----------------------
+
+.. automodule:: circkit.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.vm module
+-------------------
+
+.. automodule:: circkit.vm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: circkit
+   :members:
+   :undoc-members:
+   :show-inheritance:

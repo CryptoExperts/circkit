@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to define a transformer &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bit-slicing AES" href="tuto-p4_bitsliceAES.html" />
+    <link rel="prev" title="How to define a new circuit type" href="tuto-p2_new-circuit-type.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to define a transformer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#isw-transformer">ISW Transformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-define-your-transformer">How to define your transformer</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>How to define a transformer</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/tuto-p3_ISWtransformer.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="how-to-define-a-transformer">
+<h1>How to define a transformer<a class="headerlink" href="#how-to-define-a-transformer" title="Permalink to this heading">¶</a></h1>
+<p>By defining a transformer, we can transform a circuit into another
+circuit (possibly of a new circuit type). In this tutorial, we show you:</p>
+<ul class="simple">
+<li><p>ISW transformer: given a circuit, we transform it into a new circuit
+working on shares (ISW circuit, see
+<a class="reference external" href="https://people.eecs.berkeley.edu/~daw/papers/privcirc-crypto03.pdf">ISW03</a>).
+This is the built-in transformer which you can import and use
+directly from the <code class="xref py py-mod docutils literal notranslate"><span class="pre">circkit</span></code> framework.</p></li>
+<li><p>How to define your own transformer: we show you the steps of defining
+the ISW transformer. You will see how to define a new transformer
+from those steps.</p></li>
+</ul>
+<section id="isw-transformer">
+<h2>ISW Transformer<a class="headerlink" href="#isw-transformer" title="Permalink to this heading">¶</a></h2>
+<p>Let us take a boolean circuit as an example. We transform this circuit
+into a new boolean circuit working on shares.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.transformers.isw</span> <span class="kn">import</span> <span class="n">IswOnArithmetic</span>
+<span class="kn">from</span> <span class="nn">circkit.boolean</span> <span class="kn">import</span> <span class="n">BooleanCircuit</span>
+
+<span class="n">C</span> <span class="o">=</span> <span class="n">BooleanCircuit</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="c1"># ISW transformer</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">IswOnArithmetic</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">iswC</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+
+<span class="c1"># see the graph and verify the ISW circuit</span>
+<span class="n">iswC</span><span class="o">.</span><span class="n">digraph</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">()</span>
+
+<span class="c1"># Evaluate on original circuit</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original circuit output: </span><span class="si">{</span><span class="n">out</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Evaluate on ISW circuit</span>
+<span class="c1"># 1 = 1 + 0 + 0 and 0 = 1 + 1 + 0</span>
+<span class="n">inp_shares</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">n_tests</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_tests</span><span class="p">):</span>
+    <span class="n">out_shares</span> <span class="o">=</span> <span class="n">iswC</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp_shares</span><span class="p">)</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">out_shares</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">^=</span> <span class="n">s</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output shares: </span><span class="si">{</span><span class="n">out_shares</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">ret</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Original circuit output: [1]
+Output shares: [1, 1, 1] --&gt; 1
+Output shares: [1, 1, 1] --&gt; 1
+Output shares: [0, 1, 0] --&gt; 1
+Output shares: [0, 0, 1] --&gt; 1
+Output shares: [1, 0, 0] --&gt; 1
+</pre></div>
+</div>
+</section>
+<section id="how-to-define-your-transformer">
+<h2>How to define your transformer<a class="headerlink" href="#how-to-define-your-transformer" title="Permalink to this heading">¶</a></h2>
+<p>In this section, we show how to define the ISW transformer from which we
+can see the steps of defining a new transformer.</p>
+<p>Given a <em>source circuit</em>, our goal is to transform it into a <em>target
+circuit</em>. The high-level idea is to visit all nodes in the source
+circuit and process each node in the way we want to define the
+transformer. The framework already provides the skeleton of the
+transformation in the <code class="docutils literal notranslate"><span class="pre">CircuitTransformation</span></code> class. We just need to
+inherit this class and then define the <code class="docutils literal notranslate"><span class="pre">visit_&lt;OP&gt;</span></code> functions where
+<code class="docutils literal notranslate"><span class="pre">&lt;OP&gt;</span></code> are the operations (or node types) defined in the circuit type.</p>
+<p>In a boolean circuit, there are 4 node types. Therefore, we define 4
+functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">visit_INPUT</span></code>: for each input node in the source circuit, we create
+its nodes of shares in the target circuit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">visit_ADD</span></code> (XOR): a XOR node in the source circuit represents by
+some XOR nodes on the shares of the operands in the target circuit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">visit_MUL</span></code> (AND): to transform an AND node in the source circuit,
+we have to generate some randomnesses and create some XOR and AND
+nodes on those randomnesses and the shares.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">visit_CONST</span></code>: a constant is represented by some shares in the
+target circuit.</p></li>
+</ul>
+<p>The following code is the implementation of the ISW transformer:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.transformers.core</span> <span class="kn">import</span> <span class="n">CircuitTransformer</span>
+<span class="kn">from</span> <span class="nn">circkit.array</span> <span class="kn">import</span> <span class="n">Array</span>
+
+
+<span class="k">class</span> <span class="nc">IswOnArithmetic</span><span class="p">(</span><span class="n">CircuitTransformer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arguments</span>
+<span class="sd">        ---------</span>
+<span class="sd">        :order: ISW masking order (number of shares = order + 1)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span> <span class="o">=</span> <span class="n">order</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">visit_INPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_share</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">new_name</span><span class="p">)</span>
+            <span class="n">shares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="n">shares</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">shares</span>
+
+    <span class="k">def</span> <span class="nf">visit_ADD</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="n">visit_XOR</span> <span class="o">=</span> <span class="n">visit_ADD</span>
+
+    <span class="k">def</span> <span class="nf">visit_MUL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+                <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span>
+                <span class="n">r</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_shares</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+                    <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">z</span>
+    <span class="n">visit_AND</span> <span class="o">=</span> <span class="n">visit_MUL</span>
+
+    <span class="k">def</span> <span class="nf">visit_CONST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+        <span class="n">shares</span> <span class="o">=</span> <span class="n">Array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">RND</span><span class="p">()()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">))</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_circuit</span><span class="o">.</span><span class="n">add_const</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">operation</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">shares</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">shares</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">shares</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tuto-p2_new-circuit-type.html" class="btn btn-neutral float-left" title="How to define a new circuit type" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tuto-p4_bitsliceAES.html" class="btn btn-neutral float-right" title="Bit-slicing AES" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

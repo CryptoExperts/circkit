@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Speck Cipher &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="circkit.operation" href="operation.html" />
+    <link rel="prev" title="Simon Cipher" href="tuto-p3_simon.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Speck Cipher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-of-speck-cipher">Implementation of Speck cipher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#define-a-new-circuit-type-for-simon-cipher">Define a new circuit type for Simon cipher</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-a-circuit-for-simon-cipher">Build a circuit for Simon cipher</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">More docs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="operation.html">circkit.operation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="param.html">circkit.param</a></li>
+<li class="toctree-l1"><a class="reference internal" href="circuit.html">circkit.circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node.html">circkit.node</a></li>
+<li class="toctree-l1"><a class="reference internal" href="const_manager.html">circkit.const_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="arithmetic.html">circkit.arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bitwise.html">circkit.bitwise</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transformers.html">circkit.transformers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="location.html">circkit.location</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Speck Cipher</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/tuto-p3_speck.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="speck-cipher">
+<h1>Speck Cipher<a class="headerlink" href="#speck-cipher" title="Permalink to this heading">¶</a></h1>
+<section id="implementation-of-speck-cipher">
+<h2>Implementation of Speck cipher<a class="headerlink" href="#implementation-of-speck-cipher" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reference: https://github.com/inmcm/Simon_Speck_Ciphers/blob/master/Python/simonspeckciphers/speck/speck.py</span>
+<span class="c1"># For the sake of simplicity, we modified some functions of the original implementation</span>
+
+<span class="k">class</span> <span class="nc">SpeckCipher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Speck Block Cipher Object&quot;&quot;&quot;</span>
+    <span class="c1"># valid cipher configurations stored:</span>
+    <span class="c1"># block_size:{key_size:number_rounds}</span>
+    <span class="n">__valid_setups</span> <span class="o">=</span> <span class="p">{</span><span class="mi">32</span><span class="p">:</span> <span class="p">{</span><span class="mi">64</span><span class="p">:</span> <span class="mi">22</span><span class="p">},</span>
+                      <span class="mi">48</span><span class="p">:</span> <span class="p">{</span><span class="mi">72</span><span class="p">:</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">96</span><span class="p">:</span> <span class="mi">23</span><span class="p">},</span>
+                      <span class="mi">64</span><span class="p">:</span> <span class="p">{</span><span class="mi">96</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">128</span><span class="p">:</span> <span class="mi">27</span><span class="p">},</span>
+                      <span class="mi">96</span><span class="p">:</span> <span class="p">{</span><span class="mi">96</span><span class="p">:</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">144</span><span class="p">:</span> <span class="mi">29</span><span class="p">},</span>
+                      <span class="mi">128</span><span class="p">:</span> <span class="p">{</span><span class="mi">128</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">192</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span> <span class="mi">256</span><span class="p">:</span> <span class="mi">34</span><span class="p">}}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">key_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+
+        <span class="c1"># Setup block/word size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_setups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__valid_setups</span><span class="p">[</span><span class="n">block_size</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span> <span class="o">=</span> <span class="n">block_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+
+        <span class="c1"># Setup Number of Rounds and Key Size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">possible_setups</span><span class="p">[</span><span class="n">key_size</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_size</span> <span class="o">=</span> <span class="n">key_size</span>
+
+        <span class="c1"># Create Properly Sized bit mask for truncating addition and left shift outputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_size</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># Mod mask for modular subtraction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask_sub</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_size</span><span class="p">)</span>
+
+        <span class="c1"># Setup Circular Shift Parameters</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span> <span class="o">=</span> <span class="mi">7</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span> <span class="o">=</span> <span class="mi">8</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_size</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+
+        <span class="c1"># Pre-compile key schedule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key_schedule</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">key_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">l_schedule</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key_size</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))]</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rounds</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">new_l_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encrypt_round</span><span class="p">(</span><span class="n">l_schedule</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">l_schedule</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_l_k</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_l_k</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span>
+
+    <span class="k">def</span> <span class="nf">encrypt_round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete One Round of Feistel Operation&quot;&quot;&quot;</span>
+        <span class="n">rs_x</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span><span class="p">))</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span>
+
+        <span class="n">add_sxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">rs_x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span>
+
+        <span class="n">new_x</span> <span class="o">=</span> <span class="n">k</span> <span class="o">^</span> <span class="n">add_sxy</span>
+
+        <span class="n">ls_y</span> <span class="o">=</span> <span class="p">((</span><span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span><span class="p">))</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span>
+
+        <span class="n">new_y</span> <span class="o">=</span> <span class="n">new_x</span> <span class="o">^</span> <span class="n">ls_y</span>
+
+        <span class="k">return</span> <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span>
+
+    <span class="k">def</span> <span class="nf">decrypt_round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Complete One Round of Inverse Feistel Operation&quot;&quot;&quot;</span>
+
+        <span class="n">xor_xy</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span>
+
+        <span class="n">new_y</span> <span class="o">=</span> <span class="p">((</span><span class="n">xor_xy</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">xor_xy</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta_shift</span><span class="p">))</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span>
+
+        <span class="n">xor_xk</span> <span class="o">=</span> <span class="n">x</span> <span class="o">^</span> <span class="n">k</span>
+
+        <span class="n">msub</span> <span class="o">=</span> <span class="p">((</span><span class="n">xor_xk</span> <span class="o">-</span> <span class="n">new_y</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask_sub</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask_sub</span>
+
+        <span class="n">new_x</span> <span class="o">=</span> <span class="p">((</span><span class="n">msub</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">word_size</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">msub</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha_shift</span><span class="p">))</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">mod_mask</span>
+
+        <span class="k">return</span> <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span>
+
+    <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="c1"># Run Encryption Steps For Appropriate Number of Rounds</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encrypt_round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+    <span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="c1"># Run Encryption Steps For Appropriate Number of Rounds</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">round_keys</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decrypt_round</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>Then, we can test the above implementation with <a class="reference external" href="https://eprint.iacr.org/2013/404.pdf">some test vectors given
+by the authors of Speck</a></p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">k3264</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x1918</span><span class="p">,</span> <span class="mh">0x1110</span><span class="p">,</span> <span class="mh">0x0908</span><span class="p">,</span> <span class="mh">0x0100</span><span class="p">]</span>
+<span class="n">m3264</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x6574</span><span class="p">,</span> <span class="mh">0x694c</span><span class="p">]</span>
+<span class="n">c3264</span> <span class="o">=</span> <span class="n">SpeckCipher</span><span class="p">(</span><span class="n">k3264</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="n">t3264</span> <span class="o">=</span> <span class="n">c3264</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">m3264</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m3264</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">assert</span> <span class="n">t3264</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0xa868</span><span class="p">,</span> <span class="mh">0x42f2</span><span class="p">)</span>
+
+<span class="n">k128256</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x1f1e1d1c1b1a1918</span><span class="p">,</span> <span class="mh">0x1716151413121110</span><span class="p">,</span> <span class="mh">0x0f0e0d0c0b0a0908</span><span class="p">,</span> <span class="mh">0x0706050403020100</span><span class="p">]</span>
+<span class="n">m128256</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x65736f6874206e49</span><span class="p">,</span> <span class="mh">0x202e72656e6f6f70</span><span class="p">]</span>
+<span class="n">c128256</span> <span class="o">=</span> <span class="n">SpeckCipher</span><span class="p">(</span><span class="n">k128256</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+<span class="n">t128256</span> <span class="o">=</span> <span class="n">c128256</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">m128256</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">m128256</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">assert</span> <span class="n">t128256</span> <span class="o">==</span> <span class="p">(</span><span class="mh">0x4109010405c0f53e</span><span class="p">,</span> <span class="mh">0x4eeeb48d9c188f43</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-a-new-circuit-type-for-simon-cipher">
+<h2>Define a new circuit type for Simon cipher<a class="headerlink" href="#define-a-new-circuit-type-for-simon-cipher" title="Permalink to this heading">¶</a></h2>
+<p>By observing the above implementation of Simon cipher, we can see that
+the new circuit type has to support the following operations on
+integers:</p>
+<ul class="simple">
+<li><p>ADD</p></li>
+<li><p>SUB</p></li>
+<li><p>XOR</p></li>
+<li><p>AND</p></li>
+<li><p>MOD</p></li>
+<li><p>SHL</p></li>
+<li><p>SHR</p></li>
+</ul>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circkit.arithmetic</span> <span class="kn">import</span> <span class="n">ArithmeticCircuit</span>
+<span class="kn">from</span> <span class="nn">circkit</span> <span class="kn">import</span> <span class="n">Operation</span><span class="p">,</span> <span class="n">Param</span><span class="p">,</span> <span class="n">Circuit</span>
+
+<span class="k">class</span> <span class="nc">SpeckCircuit</span><span class="p">(</span><span class="n">Circuit</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Operations</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Operations</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">ADD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">SUB</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">AND</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">&amp;</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">XOR</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">MOD</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Binary</span><span class="p">):</span>
+            <span class="n">SYMMETRIC</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
+
+        <span class="k">class</span> <span class="nc">SHL</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Unary</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Shift left&quot;&quot;&quot;</span>
+            <span class="n">shift</span><span class="p">:</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span>
+
+        <span class="k">class</span> <span class="nc">SHR</span><span class="p">(</span><span class="n">Operation</span><span class="o">.</span><span class="n">Unary</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Shift right&quot;&quot;&quot;</span>
+            <span class="n">shift</span><span class="p">:</span> <span class="n">Param</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+            <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span>
+
+    <span class="k">class</span> <span class="nc">Node</span><span class="p">(</span><span class="n">Circuit</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+        <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">()</span>
+
+        <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">ADD</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">ADD</span><span class="p">()(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">SUB</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__rsub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">SUB</span><span class="p">()(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__xor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">XOR</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__rxor__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">XOR</span><span class="p">()(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__and__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">AND</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__rand__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">AND</span><span class="p">()(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">MOD</span><span class="p">()(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__rmod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">MOD</span><span class="p">()(</span><span class="n">b</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__lshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">SHL</span><span class="p">(</span><span class="n">v</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__rshift__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">circuit</span><span class="o">.</span><span class="n">SHR</span><span class="p">(</span><span class="n">v</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="build-a-circuit-for-simon-cipher">
+<h2>Build a circuit for Simon cipher<a class="headerlink" href="#build-a-circuit-for-simon-cipher" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="n">SpeckCircuit</span><span class="p">()</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_inputs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;k</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">msg</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">add_inputs</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">simon</span> <span class="o">=</span> <span class="n">SpeckCipher</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">cpt</span> <span class="o">=</span> <span class="n">simon</span><span class="o">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">msg</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">C</span><span class="o">.</span><span class="n">add_output</span><span class="p">(</span><span class="n">cpt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, we can evaluate the circuit to test its correctness.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">k3264</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x1918</span><span class="p">,</span> <span class="mh">0x1110</span><span class="p">,</span> <span class="mh">0x0908</span><span class="p">,</span> <span class="mh">0x0100</span><span class="p">]</span>
+<span class="n">m3264</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0x6574</span><span class="p">,</span> <span class="mh">0x694c</span><span class="p">]</span>
+<span class="n">inp</span> <span class="o">=</span> <span class="n">k3264</span> <span class="o">+</span> <span class="n">m3264</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">43112</span><span class="p">,</span> <span class="mi">17138</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tuto-p3_simon.html" class="btn btn-neutral float-left" title="Simon Cipher" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="operation.html" class="btn btn-neutral float-right" title="circkit.operation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>circkit.arithmetic &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>circkit.arithmetic</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/arithmetic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-circkit.arithmetic">
+<span id="circkit-arithmetic"></span><h1>circkit.arithmetic<a class="headerlink" href="#module-circkit.arithmetic" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.Table">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.arithmetic.</span></span><span class="sig-name descname"><span class="pre">Table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.Table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.arithmetic.</span></span><span class="sig-name descname"><span class="pre">ArithmeticCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit" title="circkit.circuit.Circuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit</span></code></a></p>
+<p>Generic class for arithmetic circuits.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Operations</span></span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations" title="circkit.circuit.Circuit.Operations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operations</span></code></a></p>
+<p>Class gathering <code class="xref py py-class docutils literal notranslate"><span class="pre">Operation`s</span> <span class="pre">of</span> <span class="pre">:class:</span></code>.ArithmeticCircuit`.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.ADD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.ADD.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.ADD.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.SUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.SUB.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.SUB.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.MUL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.MUL.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.MUL.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.DIV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DIV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.DIV.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.DIV.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.EXP">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EXP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.EXP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.EXP.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.EXP.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.INV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.INV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.INV.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.INV.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.NEG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NEG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.NEG.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.NEG.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.LUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.LUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.LUT.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.LUT.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.RND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.RND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Nullary" title="circkit.operation.Nullary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Nullary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Operations.RND.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Operations.RND.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Node">
+<span class="sig-name descname"><span class="pre">Node</span></span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Node" title="circkit.arithmetic.ArithmeticCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.to_matrix">
+<span class="sig-name descname"><span class="pre">to_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">one</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_tests</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.to_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to express the circuit as an affine map
+C(x) = A*x + b, where
+A is a matrix
+b is a vector, b = 0 when the map is linear</p>
+<p>Done by evaluating the circuit at unit-vector inputs and at zero vector.
+Does not verify that the circuit is actually linear.</p>
+<dl class="simple">
+<dt>Note: current implementation does batch execution using Array inputs</dt><dd><p>may be doing single calls is more reliable for some circuit variants.</p>
+</dd>
+</dl>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>add option for non-batch execution</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zero</strong> (<em>const</em>) – constant representing zero</p></li>
+<li><p><strong>one</strong> (<em>const</em>) – constant representing one</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>matrix A
+Array: vector b</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.ADD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.ADD" title="circkit.arithmetic.ArithmeticCircuit.Operations.ADD"><code class="xref py py-class docutils literal notranslate"><span class="pre">ADD</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.CONST">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CONST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.CONST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.CONST" title="circkit.circuit.Circuit.Operations.CONST"><code class="xref py py-class docutils literal notranslate"><span class="pre">CONST</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.DIV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DIV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.DIV" title="circkit.arithmetic.ArithmeticCircuit.Operations.DIV"><code class="xref py py-class docutils literal notranslate"><span class="pre">DIV</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.EXP">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EXP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.EXP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.EXP" title="circkit.arithmetic.ArithmeticCircuit.Operations.EXP"><code class="xref py py-class docutils literal notranslate"><span class="pre">EXP</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.GET">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.GET" title="circkit.circuit.Circuit.Operations.GET"><code class="xref py py-class docutils literal notranslate"><span class="pre">GET</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.INPUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.INPUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.INPUT" title="circkit.circuit.Circuit.Operations.INPUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">INPUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.INV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.INV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.INV" title="circkit.arithmetic.ArithmeticCircuit.Operations.INV"><code class="xref py py-class docutils literal notranslate"><span class="pre">INV</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.LUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.LUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.LUT" title="circkit.arithmetic.ArithmeticCircuit.Operations.LUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.MUL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.MUL" title="circkit.arithmetic.ArithmeticCircuit.Operations.MUL"><code class="xref py py-class docutils literal notranslate"><span class="pre">MUL</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.NEG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NEG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.NEG" title="circkit.arithmetic.ArithmeticCircuit.Operations.NEG"><code class="xref py py-class docutils literal notranslate"><span class="pre">NEG</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.Node_unlinked">
+<span class="sig-name descname"><span class="pre">Node_unlinked</span></span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.Node_unlinked" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Node" title="circkit.arithmetic.ArithmeticCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.RND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.RND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.RND" title="circkit.arithmetic.ArithmeticCircuit.Operations.RND"><code class="xref py py-class docutils literal notranslate"><span class="pre">RND</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.ArithmeticCircuit.SUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.ArithmeticCircuit.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.SUB" title="circkit.arithmetic.ArithmeticCircuit.Operations.SUB"><code class="xref py py-class docutils literal notranslate"><span class="pre">SUB</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.arithmetic.</span></span><span class="sig-name descname"><span class="pre">OptArithmeticCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit" title="circkit.arithmetic.ArithmeticCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArithmeticCircuit</span></code></a></p>
+<p>Optimized arithmetic circuits.</p>
+<p>Optimizations include:</p>
+<ul class="simple">
+<li><p>caching operations and nodes;</p></li>
+<li><p>precomputing annihilator operations, e.g. a*0 = 0;</p></li>
+<li><p>precomputing identity operations, e.g. a*1 = a, a+0 = 0;</p></li>
+<li><p>precomputing constant operations;</p></li>
+</ul>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.Node">
+<span class="sig-name descname"><span class="pre">Node</span></span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.arithmetic.OptArithmeticCircuit.Node" title="circkit.arithmetic.OptArithmeticCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.ADD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.ADD" title="circkit.arithmetic.ArithmeticCircuit.Operations.ADD"><code class="xref py py-class docutils literal notranslate"><span class="pre">ADD</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.CONST">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CONST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.CONST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.CONST" title="circkit.circuit.Circuit.Operations.CONST"><code class="xref py py-class docutils literal notranslate"><span class="pre">CONST</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.DIV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DIV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.DIV" title="circkit.arithmetic.ArithmeticCircuit.Operations.DIV"><code class="xref py py-class docutils literal notranslate"><span class="pre">DIV</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.EXP">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EXP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.EXP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.EXP" title="circkit.arithmetic.ArithmeticCircuit.Operations.EXP"><code class="xref py py-class docutils literal notranslate"><span class="pre">EXP</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.GET">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.GET" title="circkit.circuit.Circuit.Operations.GET"><code class="xref py py-class docutils literal notranslate"><span class="pre">GET</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.INPUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.INPUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.INPUT" title="circkit.circuit.Circuit.Operations.INPUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">INPUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.INV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.INV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.INV" title="circkit.arithmetic.ArithmeticCircuit.Operations.INV"><code class="xref py py-class docutils literal notranslate"><span class="pre">INV</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.LUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.LUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.LUT" title="circkit.arithmetic.ArithmeticCircuit.Operations.LUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.MUL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.MUL" title="circkit.arithmetic.ArithmeticCircuit.Operations.MUL"><code class="xref py py-class docutils literal notranslate"><span class="pre">MUL</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.NEG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NEG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.NEG" title="circkit.arithmetic.ArithmeticCircuit.Operations.NEG"><code class="xref py py-class docutils literal notranslate"><span class="pre">NEG</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.Node_unlinked">
+<span class="sig-name descname"><span class="pre">Node_unlinked</span></span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.Node_unlinked" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.arithmetic.OptArithmeticCircuit.Node" title="circkit.arithmetic.OptArithmeticCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.RND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.RND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.RND" title="circkit.arithmetic.ArithmeticCircuit.Operations.RND"><code class="xref py py-class docutils literal notranslate"><span class="pre">RND</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.arithmetic.OptArithmeticCircuit.SUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.arithmetic.OptArithmeticCircuit.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.arithmetic.ArithmeticCircuit.Operations.SUB" title="circkit.arithmetic.ArithmeticCircuit.Operations.SUB"><code class="xref py py-class docutils literal notranslate"><span class="pre">SUB</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

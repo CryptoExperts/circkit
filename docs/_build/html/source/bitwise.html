@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>circkit.bitwise &mdash; circkit  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> circkit
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_builtin-circuit.html">How to build an arithmetic circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_bitwise-circuit.html">How to build a bitwise circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p1_boolean-circuit.html">How to build a boolean circuit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p2_new-circuit-type.html">How to define a new circuit type</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p3_ISWtransformer.html">How to define a transformer</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_bitsliceAES.html">Bit-slicing AES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_simon.html">Simon Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_speck.html">Speck Cipher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuto-p4_BUquadratic-masking.html">Minimalist quadratic masking transformer</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">circkit</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>circkit.bitwise</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/bitwise.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-circkit.bitwise.circuit">
+<span id="circkit-bitwise"></span><h1>circkit.bitwise<a class="headerlink" href="#module-circkit.bitwise.circuit" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.bitwise.circuit.</span></span><span class="sig-name descname"><span class="pre">BitwiseCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit" title="circkit.circuit.Circuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Circuit</span></code></a></p>
+<p>Generic class for bitwise circuits (unsigned words).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Operations</span></span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations" title="circkit.circuit.Circuit.Operations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Operations</span></code></a></p>
+<p>Class gathering <code class="xref py py-class docutils literal notranslate"><span class="pre">Operation`s</span> <span class="pre">of</span> <span class="pre">:class:</span></code>.ArithmeticCircuit`.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.AND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.AND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.AND.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.AND.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.OR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.OR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.OR.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.OR.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XOR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NOT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SHL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<p>Shift left</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SHR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<p>Shift right</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ROL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<p>Rotate left</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ROR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<p>Rotate left</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DIV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MOD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Binary" title="circkit.operation.Binary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Binary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NEG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Unary" title="circkit.operation.Unary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Unary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.RND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.RND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="operation.html#circkit.operation.Nullary" title="circkit.operation.Nullary"><code class="xref py py-class docutils literal notranslate"><span class="pre">Nullary</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Operations.RND.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.RND.eval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the operation on given inputs (typically values, not nodes).</p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Node">
+<span class="sig-name descname"><span class="pre">Node</span></span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Node" title="circkit.bitwise.circuit.BitwiseCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.ADD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ADD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.ADD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.ADD"><code class="xref py py-class docutils literal notranslate"><span class="pre">ADD</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.AND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.AND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.AND" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.AND"><code class="xref py py-class docutils literal notranslate"><span class="pre">AND</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.CONST">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CONST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.CONST" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.CONST" title="circkit.circuit.Circuit.Operations.CONST"><code class="xref py py-class docutils literal notranslate"><span class="pre">CONST</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.DIV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DIV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.DIV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.DIV"><code class="xref py py-class docutils literal notranslate"><span class="pre">DIV</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.GET">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GET</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.GET" title="circkit.circuit.Circuit.Operations.GET"><code class="xref py py-class docutils literal notranslate"><span class="pre">GET</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.INPUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">INPUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.INPUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="circuit.html#circkit.circuit.Circuit.Operations.INPUT" title="circkit.circuit.Circuit.Operations.INPUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">INPUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.LUT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LUT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.LUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.LUT"><code class="xref py py-class docutils literal notranslate"><span class="pre">LUT</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.MOD">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MOD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.MOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.MOD"><code class="xref py py-class docutils literal notranslate"><span class="pre">MOD</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.MUL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MUL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.MUL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.MUL"><code class="xref py py-class docutils literal notranslate"><span class="pre">MUL</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.NEG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NEG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.NEG" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.NEG"><code class="xref py py-class docutils literal notranslate"><span class="pre">NEG</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.NOT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NOT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.NOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.NOT"><code class="xref py py-class docutils literal notranslate"><span class="pre">NOT</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.Node_unlinked">
+<span class="sig-name descname"><span class="pre">Node_unlinked</span></span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.Node_unlinked" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Node" title="circkit.bitwise.circuit.BitwiseCircuit.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.OR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.OR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.OR" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.OR"><code class="xref py py-class docutils literal notranslate"><span class="pre">OR</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.RND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.RND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.RND" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.RND"><code class="xref py py-class docutils literal notranslate"><span class="pre">RND</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.ROL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ROL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.ROL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROL"><code class="xref py py-class docutils literal notranslate"><span class="pre">ROL</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.ROR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ROR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.ROR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.ROR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ROR</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.SHL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SHL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.SHL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHL"><code class="xref py py-class docutils literal notranslate"><span class="pre">SHL</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.SHR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SHR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.SHR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.SHR"><code class="xref py py-class docutils literal notranslate"><span class="pre">SHR</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.SUB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SUB</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.SUB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.SUB"><code class="xref py py-class docutils literal notranslate"><span class="pre">SUB</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.circuit.BitwiseCircuit.XOR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XOR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kvalues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.circuit.BitwiseCircuit.XOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR" title="circkit.bitwise.circuit.BitwiseCircuit.Operations.XOR"><code class="xref py py-class docutils literal notranslate"><span class="pre">XOR</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-circkit.bitwise.ring"></span><dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.BitwiseRing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.bitwise.ring.</span></span><span class="sig-name descname"><span class="pre">BitwiseRing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.BitwiseRing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Ring of fixed-width bit-words.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.BitwiseRing.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.BitwiseRing.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.BitwiseRing.fetch_int">
+<span class="sig-name descname"><span class="pre">fetch_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.BitwiseRing.fetch_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.BitwiseRing.Word">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.BitwiseRing.Word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wrapper for a bit-word.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ring</strong> (<a class="reference internal" href="#circkit.bitwise.ring.BitwiseRing" title="circkit.bitwise.ring.BitwiseRing"><em>BitwiseRing</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.BitwiseRing.Word.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.BitwiseRing.Word.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ring</strong> (<a class="reference internal" href="#circkit.bitwise.ring.BitwiseRing" title="circkit.bitwise.ring.BitwiseRing"><em>BitwiseRing</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.Word">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circkit.bitwise.ring.</span></span><span class="sig-name descname"><span class="pre">Word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.Word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wrapper for a bit-word.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ring</strong> (<a class="reference internal" href="#circkit.bitwise.ring.BitwiseRing" title="circkit.bitwise.ring.BitwiseRing"><em>BitwiseRing</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="circkit.bitwise.ring.Word.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ring</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circkit.bitwise.ring.Word.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ring</strong> (<a class="reference internal" href="#circkit.bitwise.ring.BitwiseRing" title="circkit.bitwise.ring.BitwiseRing"><em>BitwiseRing</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-circkit.bitwise.const_manager"></span></section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, CryptoExperts.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

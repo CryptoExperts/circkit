@@ -1,0 +1,54 @@
+circkit.transformers package
+==============================
+
+Submodules
+----------
+
+circkit.transformers.core module
+----------------------------------
+
+.. automodule:: circkit.transformers.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.transformers.derandomizer module
+------------------------------------------
+
+.. automodule:: circkit.transformers.derandomizer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.transformers.isw module
+---------------------------------
+
+.. automodule:: circkit.transformers.isw
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.transformers.optimizer module
+---------------------------------------
+
+.. automodule:: circkit.transformers.optimizer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+circkit.transformers.scheduler module
+---------------------------------------
+
+.. automodule:: circkit.transformers.scheduler
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: circkit.transformers
+   :members:
+   :undoc-members:
+   :show-inheritance:
