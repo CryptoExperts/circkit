@@ -1,0 +1,16 @@
+*.DS_Store
+# docs/_build/
+# !docs/_build/html/.buildinfo
+# !docs/_build/html/_sources/
+# !docs/_build/html/source/
+# !docs/_build/html/searchindex.js
+# !docs/_build/html/_images/
+
+# .ipynb_checkpoints
+# *.pyc
+# build/*
+# circkit.egg-info
+# *.gv
+# *.gv.pdf
+# .venv/*
+# .tox/*
