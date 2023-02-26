@@ -309,7 +309,7 @@ class Operation(metaclass=OperationMeta):
                     value = self.eval(
                         *[node.operation.value for node in incoming]
                     )
-                    return self.circuit.add_const(value)
+                    return self._circuit.add_const(value)
 
         if self._circuit.CACHE_NODES:
             node_cache_key = tuple(node.id for node in incoming)

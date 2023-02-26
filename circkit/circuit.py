@@ -481,8 +481,8 @@ class Circuit(BaseCircuit):
                 | (hash((1, key)))
             )
 
-            if node in seen:
-                node0 = seen[node]
+            if h in seen:
+                node0 = seen[h]
                 if node0.operation != node.operation or node_inc(node0) != node_inc(node):
                     raise RuntimeError(
                         "Hash collision, try extending hash size"
@@ -498,9 +498,9 @@ class Circuit(BaseCircuit):
                         outgoing.append(out)
                     sub.outgoing = outgoing
 
-                for out in node.outgoing:
+                for sub in node.outgoing:
                     incoming = []
-                    for inc in out.incoming:
+                    for inc in sub.incoming:
                         if inc is node:
                             inc = node0
                         incoming.append(inc)

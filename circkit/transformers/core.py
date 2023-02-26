@@ -15,6 +15,33 @@ class Transformer:
     current_node: Node = None
     current_operation: Operation = None
 
+    """
+    The function `transform` is the main API, i.e. a transformation is called  
+    by `Transformer().transform(...)`. Depending on the customization of the 
+    transformer, some (or all) of the following functions should be overridden.
+    (see the `CircuitTransformer` class and the `IswOnArithmetic` class 
+    for examples).
+
+    The `transform` function sequentially calls the following functions:
+        - `before_transform`: initialize a stack
+        - `visit_all`: for each node in the circuit:
+            * `before_visit`: add node to stack
+            * `visit`: go to `visit_<OP>` where <OP> is the operation of the
+                       current node. This function should be defined in a
+                       new class which inherits this class (see the 
+                       `IswOnArithmetic` class for an example). If undefined,
+                       it goes to the `visit_generic` function.
+            * `after_visit`: pop node from stack
+        - `after_transform`: check stack is empty
+
+    Meaning of some important attributes/methods in this class:
+        - `self.result`: output nodes after visit a node. For example, a node 
+                         is represented by some shares after an ISW transformation.
+                         Then `self.result[node] = [share_0, share_1, ...]`
+        - `self.make_output(...)`: mark the output nodes of the new circuit.
+    """
+
+    # VSN: This kwargs should be clearly detailed
     def transform(self, circuit, **kwargs):
         self.before_transform(circuit, **kwargs)
 
@@ -95,7 +122,22 @@ class Transformer:
 
 
 class CircuitTransformer(Transformer):
-    """Base class for circuit->circuit transformers."""
+    """
+    Base class for circuit->circuit transformers.
+    
+    The new methods in this class include:
+        - Handle the target circuit: A target circuit can be specified by users. 
+          If unspecified, it takes the default circuit type or the same circuit 
+          type as the source circuit. It does the same with the base ring.
+        - `visit_generic(...)` (default visit for a node if its `visit_<OP>` 
+          is not define): It copies the node from the source circuit to the 
+          target circuit (no transformation).
+        - `make_output(...)`: mark output nodes for the target circuit.
+
+    Some important attributes/methods in this class:
+        - self.target_circuit
+        - self.source_circuit
+    """
     DEFAULT_CIRCUIT_CLASS = None
     DEFAULT_BASE_RING = None
 
